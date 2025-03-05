@@ -2,10 +2,10 @@ import styles from "./playing-card.module.scss";
 import { JackIcon } from "../icons/jack";
 import { QueenIcon } from "../icons/queen";
 import { KingIcon } from "../icons/king";
-import type { CardRank } from ".";
+import { TCardRank } from "@/types/playing-card";
 
 interface PlayingCardFaceProps {
-    rank: CardRank
+    rank: TCardRank
 }
 
 const PlayingCardFace = ({ rank }: PlayingCardFaceProps) => {
@@ -18,7 +18,7 @@ const PlayingCardFace = ({ rank }: PlayingCardFaceProps) => {
     )
 }
 
-function getFaceCardIcon(rank: CardRank) { 
+function getFaceCardIcon(rank: TCardRank) { 
     switch (rank) {
         case "J":
             return JackIcon

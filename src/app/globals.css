@@ -1,6 +1,8 @@
 :root {
   --background: #bd0000;
   --foreground: #f2f2f2;
+
+  --card-width: 160px;
 }
 
 /* @media (prefers-color-scheme: dark) {

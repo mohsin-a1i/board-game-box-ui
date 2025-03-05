@@ -1,23 +1,23 @@
+import type { TPlayingCard, TCardSuit, TCardRank } from "@/types/playing-card";
 import styles from "./playing-card.module.scss";
 import { ClubIcon, DiamondIcon, HeartIcon, SpadeIcon } from "../icons"
 import cn from "@/lib/cn";
 import PlayingCardPattern from "./playing-card-pattern";
 import PlayingCardFace from "./playing-card-face";
-
-export type CardSuit = "spade" | "club" | "heart" | "diamond"
-export type CardRank = "A" | "K" | "Q" | "J" | "10" | "9" | "8" | "7" | "6" | "5" | "4" | "3" | "2" | "1"
+import { HTMLAttributes } from "react";
 
 interface PlayingCardProps {
-    rank: CardRank
-    suit: CardSuit
+    style: HTMLAttributes<HTMLDivElement>["style"]
+    className?: string
+    card: TPlayingCard
 }
 
-const PlayingCard = ({ rank, suit }: PlayingCardProps) => {
+const TPlayingCard = ({ style, className, card: { rank, suit } }: PlayingCardProps) => {
     const isFaceCard = checkFaceCard(rank)
     const SuitIcon = getSuitIcon(suit)
 
     return (
-        <div className={cn(styles.card, styles[suit])}>
+        <div style={style} className={cn(styles.card, styles[suit], className)}>
             <div className={styles.edge}>
                <span>{rank}</span>
                <SuitIcon className={styles.icon}/>
@@ -35,7 +35,7 @@ const PlayingCard = ({ rank, suit }: PlayingCardProps) => {
     )
 }
 
-function getSuitIcon(suit: CardSuit) {
+function getSuitIcon(suit: TCardSuit) {
     switch (suit) {
         case "spade":
             return SpadeIcon
@@ -51,7 +51,7 @@ function getSuitIcon(suit: CardSuit) {
 }
 
 
-function checkFaceCard(rank: CardRank) {
+function checkFaceCard(rank: TCardRank) {
     switch (rank) {
         case "J":
         case "Q":
@@ -63,5 +63,5 @@ function checkFaceCard(rank: CardRank) {
 }
 
 
-export default PlayingCard
+export default TPlayingCard
 

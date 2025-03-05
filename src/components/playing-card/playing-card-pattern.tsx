@@ -1,10 +1,10 @@
 import styles from "./playing-card.module.scss";
 import { SVGProps } from "react";
-import type { CardRank } from ".";
 import cn from "@/lib/cn";
+import { TCardRank } from "@/types/playing-card";
 
 interface PlayingCardPatternProps {
-    rank: CardRank
+    rank: TCardRank
     Icon: React.FC<SVGProps<SVGSVGElement>>
 }
 
@@ -20,7 +20,7 @@ const PlayingCardPattern = ({ rank, Icon }: PlayingCardPatternProps) => {
     )
 }
 
-function getIconCount(rank: CardRank) { 
+function getIconCount(rank: TCardRank) { 
     if (rank === "A") return 1
     return parseInt(rank)
 }
