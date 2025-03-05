@@ -1,18 +1,25 @@
 .hand {
-    --hand-height: 300px;
-    height: var(--hand-height);
+    position: absolute;
+    width: 100%;
+    bottom: 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
   .card {
+    --card-width: 30%;
+    width: var(--card-width);
     position: absolute;
     transform-origin: bottom center;
-    transform: rotate(calc(var(--i) * 10deg));
+    transform: translateX(calc(var(--i) * var(--card-width) / 4)) rotate(calc(var(--i) * 3deg));
     transition: transform 1s;
   }
 
+  .card:hover {
+    transform: translateX(calc(var(--i) * var(--card-width) / 4)) rotate(calc(var(--i) * 3deg)) scale(1.1);
+  }
+
   .card:hover ~ .card {
-    transform: translateX(var(--card-width)) rotate(calc(var(--i) * 10deg));
+    transform: translateX(calc(var(--i) * var(--card-width) / 4 + var(--card-width))) rotate(calc(var(--i) * 3deg));
   }

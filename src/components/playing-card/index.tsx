@@ -19,7 +19,7 @@ const TPlayingCard = ({ style, className, card: { rank, suit } }: PlayingCardPro
     return (
         <div style={style} className={cn(styles.card, styles[suit], className)}>
             <div className={styles.edge}>
-               <span>{rank}</span>
+               <span className={styles.rank}>{rank}</span>
                <SuitIcon className={styles.icon}/>
             </div>
             {isFaceCard ? (
@@ -28,7 +28,7 @@ const TPlayingCard = ({ style, className, card: { rank, suit } }: PlayingCardPro
                 <PlayingCardPattern rank={rank} Icon={SuitIcon} />
             )}
             <div className={styles.edge}>
-               <span>{rank}</span>
+               <span className={styles.rank}>{rank}</span>
                <SuitIcon className={styles.icon}/>
             </div>
         </div>

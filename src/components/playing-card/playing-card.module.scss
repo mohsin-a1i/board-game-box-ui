@@ -1,9 +1,8 @@
 .card {
     background: #f2f2f2;
-    border-radius: calc(var(--card-width) / 10);
+    border-radius: 5%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    height: calc(var(--card-width) * 1.4);
-    width: var(--card-width);
+    aspect-ratio: 0.714;
     display: flex;
     cursor: pointer;
 
@@ -16,17 +15,21 @@
     }
 
     .edge {
-        flex: 0 0 10%;
-        padding: 5px;
+        width: 20%;
+        flex: 0 0 20%;
+        padding: 4%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: large;
-        font-weight: bold;
+    
+        .rank {
+            font-weight: bold;
+            user-select: none;
+        }
 
         .icon {
-            width: calc(var(--card-width) / 10);
-            height: calc(var(--card-width) / 10);
+            width: 80%;
+            height: auto;
         }
     }
 
@@ -36,16 +39,15 @@
 
     .pattern {
         flex: 1;
-        padding: calc(var(--card-width) / 12) 0;
+        padding: 8% 0;
         display: grid;
         align-items: center;
         justify-items: center;
         grid-auto-flow: column;
 
         .icon {
-            color: var(--card-foreground);
-            width: calc(var(--card-width) / 6);
-            height: calc(var(--card-width) / 6);
+            width: 80%;
+            height: auto;
         }
 
         &.pattern-10, &.pattern-9 {
@@ -130,22 +132,25 @@
             }
         }
 
-        &.pattern-3, &.pattern-2 {
-            grid-auto-flow: row;
+        &.pattern-3, &.pattern-2, &.pattern-1 {
+            grid-template-columns: repeat(3, 1fr);
+
+            .icon {
+                grid-column: 2;
+            }
         }
     }
 
     .face {
         flex: 1;
-        padding: calc(var(--card-width) / 12) 0;
+        padding: 8% 0;
         display: flex;
         align-items: center;
         justify-content: center;
 
         .icon {
-            color: var(--card-foreground);
-            width: calc(var(--card-width) / 2);
-            height: calc(var(--card-width) / 2);
+            width: 80%;
+            height: auto;
         }
     }
 }
