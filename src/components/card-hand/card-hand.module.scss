@@ -1,25 +1,29 @@
 .hand {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .card {
-    --card-width: 30%;
-    width: var(--card-width);
-    position: absolute;
-    transform-origin: bottom center;
-    transform: translateX(calc(var(--i) * var(--card-width) / 4)) rotate(calc(var(--i) * 3deg));
-    transition: transform 1s;
-  }
+  --card-width: min(30vw, 160px);
+  position: fixed;
+  bottom: calc(-0.75 * var(--card-width));
+  width: 100%;
+  display: grid;
+  justify-content: center;
+}
 
-  .card:hover {
-    transform: translateX(calc(var(--i) * var(--card-width) / 4)) rotate(calc(var(--i) * 3deg)) scale(1.1);
-  }
+.card {
+  grid-area: 1 / 1 / 2 / 2;
+  width: var(--card-width);
+  transform-origin: center;
+  transition: transform 1s;
 
-  .card:hover ~ .card {
-    transform: translateX(calc(var(--i) * var(--card-width) / 4 + var(--card-width))) rotate(calc(var(--i) * 3deg));
+  --rotation: calc(var(--i) * 3deg);
+  --translationX: calc(var(--i) * 15%);
+  --slideTranslationX: calc((var(--i) + 2) * 15%);
+  --slideTranslationY: calc(-1 * 25%);
+  transform: translateX(var(--translationX)) rotate(var(--rotation));
+
+  &:hover {
+    transform: translateX(var(--translationX)) rotate(var(--rotation)) translateY(var(--slideTranslationY));
+
+    &~.card {
+      transform: translateX(var(--slideTranslationX)) rotate(var(--rotation));
+    }
   }
+}

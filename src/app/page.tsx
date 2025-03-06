@@ -1,5 +1,5 @@
+import type { TPlayingCard } from "@/types/playing-card";
 import CardHand from "@/components/card-hand";
-import { TPlayingCard } from "@/types/playing-card";
 
 const cards: TPlayingCard[] = [
   { id: 1, rank: 'A', suit: "spade" },
@@ -19,13 +19,6 @@ const cards: TPlayingCard[] = [
 
 export default function Home() {
   return (
-    <>
-      <main>
-        <CardHand cards={cards}/>
-      </main>
-      <footer>
-       
-      </footer>
-    </>
+    <CardHand cards={cards}/>
   );
 }

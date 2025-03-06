@@ -4,25 +4,23 @@ import cn from "@/lib/cn";
 import { TCardRank } from "@/types/playing-card";
 
 interface PlayingCardPatternProps {
-    rank: TCardRank
-    Icon: React.FC<SVGProps<SVGSVGElement>>
+  rank: TCardRank
+  Icon: React.FC<SVGProps<SVGSVGElement>>
 }
 
-const PlayingCardPattern = ({ rank, Icon }: PlayingCardPatternProps) => {
-    const iconCount = getIconCount(rank)
+export default function PlayingCardPattern({ rank, Icon }: PlayingCardPatternProps) {
+  const iconCount = getIconCount(rank)
 
-    return (
-        <div className={cn(styles.pattern, styles[`pattern-${iconCount}`])}>
-            {Array.from({ length: iconCount }).map((_, index) => (
-                <Icon key={index} className={styles.icon}/>
-            ))}
-        </div>
-    )
+  return (
+    <div className={cn(styles.pattern, styles[`pattern-${iconCount}`])}>
+      {Array.from({ length: iconCount }).map((_, index) => (
+        <Icon key={index} className={styles.icon} />
+      ))}
+    </div>
+  )
 }
 
-function getIconCount(rank: TCardRank) { 
-    if (rank === "A") return 1
-    return parseInt(rank)
+function getIconCount(rank: TCardRank) {
+  if (rank === "A") return 1
+  return parseInt(rank)
 }
-
-export default PlayingCardPattern
