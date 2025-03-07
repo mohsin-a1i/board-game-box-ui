@@ -3,11 +3,11 @@
 import type { TPlayingCard, TCardSuit, TCardRank } from "@/types/playing-card";
 import styles from "./playing-card.module.scss";
 import { ClubIcon, DiamondIcon, HeartIcon, SpadeIcon } from "../icons"
-import cn from "@/lib/cn";
+import cn from "@/utilities/cn";
 import PlayingCardPattern from "./playing-card-pattern";
 import PlayingCardFace from "./playing-card-face";
 import { HTMLAttributes, useLayoutEffect, useRef, useState } from "react";
-import { onResize } from "@/app/hooks/on-resize";
+import { onResize } from "@/hooks/on-resize";
 
 interface PlayingCardProps {
   style?: HTMLAttributes<HTMLDivElement>["style"]
@@ -21,7 +21,7 @@ export default function PlayingCard({ style, className, card: { rank, suit } }: 
   const SuitIcon = getSuitIcon(suit)
 
   return (
-    <div ref={cardElement} style={style} className={cn(styles.card, styles[suit], className)}>
+    <div ref={cardElement} style={style} className={cn(styles.card, styles[suit], className)} data-touchable>
       <div className={styles.edge}>
         <span className={styles.rank}>{rank}</span>
         <SuitIcon className={styles.icon} />

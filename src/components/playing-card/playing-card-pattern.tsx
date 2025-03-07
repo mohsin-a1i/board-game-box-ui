@@ -1,6 +1,6 @@
 import styles from "./playing-card.module.scss";
 import { SVGProps } from "react";
-import cn from "@/lib/cn";
+import cn from "@/utilities/cn";
 import { TCardRank } from "@/types/playing-card";
 
 interface PlayingCardPatternProps {

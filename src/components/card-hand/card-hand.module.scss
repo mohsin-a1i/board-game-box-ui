@@ -1,14 +1,8 @@
-.hand {
-  --card-width: min(30vw, 160px);
-  position: fixed;
-  bottom: calc(-0.75 * var(--card-width));
-  width: 100%;
-  display: grid;
-  justify-content: center;
-}
-
 .card {
-  grid-area: 1 / 1 / 2 / 2;
+  --card-width: min(30vw, 160px);
+  position: absolute;
+  bottom: calc(-0.75 * var(--card-width));
+  left: calc(50% - var(--card-width) / 2);
   width: var(--card-width);
   transform-origin: center;
   transition: transform 1s;
@@ -18,12 +12,13 @@
   --slideTranslationX: calc((var(--i) + 2) * 15%);
   --slideTranslationY: calc(-1 * 25%);
   transform: translateX(var(--translationX)) rotate(var(--rotation));
+}
 
-  &:hover {
-    transform: translateX(var(--translationX)) rotate(var(--rotation)) translateY(var(--slideTranslationY));
+body:not(:global(.touch-device)) .card:hover,
+:global(.touched) {
+  transform: translateX(var(--translationX)) rotate(var(--rotation)) translateY(var(--slideTranslationY));
 
-    &~.card {
-      transform: translateX(var(--slideTranslationX)) rotate(var(--rotation));
-    }
+  &~.card {
+    transform: translateX(var(--slideTranslationX)) rotate(var(--rotation));
   }
 }

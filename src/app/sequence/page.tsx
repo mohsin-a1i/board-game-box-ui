@@ -1,6 +1,7 @@
 import type { TPlayingCard } from "@/types/playing-card";
 import CardHand from "@/components/card-hand";
 import SequenceBoard from "./sequence-board";
+import TouchContextProvider from "@/components/touch-context";
 
 const cards: TPlayingCard[] = [
   { id: 1, rank: 'A', suit: "spade" },
@@ -13,9 +14,9 @@ const cards: TPlayingCard[] = [
 
 export default function SequencePage() {
   return (
-    <>
+    <TouchContextProvider>
       <SequenceBoard />
       <CardHand cards={cards} />
-    </>
+    </TouchContextProvider>
   );
 }
