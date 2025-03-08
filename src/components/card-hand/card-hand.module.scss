@@ -1,24 +1,32 @@
+.drag-constraints {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .card {
   --card-width: min(30vw, 160px);
   position: absolute;
-  bottom: calc(-0.75 * var(--card-width));
+  bottom: 0;
   left: calc(50% - var(--card-width) / 2);
   width: var(--card-width);
-  transform-origin: center;
-  transition: transform 1s;
+  // transform-origin: center;
+  // transition: transform 1s;
 
-  --rotation: calc(var(--i) * 3deg);
-  --translationX: calc(var(--i) * 15%);
-  --slideTranslationX: calc((var(--i) + 2) * 15%);
-  --slideTranslationY: calc(-1 * 25%);
-  transform: translateX(var(--translationX)) rotate(var(--rotation));
+  // --rotation: calc(var(--i) * 3deg);
+  // --translationX: calc(var(--i) * 15%);
+  // --slideTranslationX: calc((var(--i) + 2) * 15%);
+  // --slideTranslationY: calc(-1 * 25%);
+  // transform: translateX(var(--translationX)) rotate(var(--rotation));
 }
 
-body:not(:global(.touch-device)) .card:hover,
-:global(.touched) {
-  transform: translateX(var(--translationX)) rotate(var(--rotation)) translateY(var(--slideTranslationY));
+// body:not(:global(.touch-device)) .card:hover,
+// :global(.touched) {
+//   transform: translateX(var(--translationX)) rotate(var(--rotation)) translateY(var(--slideTranslationY));
 
-  &~.card {
-    transform: translateX(var(--slideTranslationX)) rotate(var(--rotation));
-  }
-}
+//   &~.card {
+//     transform: translateX(var(--slideTranslationX)) rotate(var(--rotation));
+//   }
+// }

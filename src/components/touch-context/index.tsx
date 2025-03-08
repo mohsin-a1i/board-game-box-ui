@@ -1,50 +1,102 @@
 'use client'
 
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-const TouchContext = createContext({})
+export type TCoordinate = { x: number, y: number }
+type TTouchableOptions = {
+  drag?: {
+    detectDrag: (delta: TCoordinate) => TCoordinate | undefined,
+    onDrag: (delta: TCoordinate) => void
+  }
+}
+type TTouchableDetails = { element: HTMLElement, options: TTouchableOptions }
+type TRegisterTouchable = (element: HTMLElement, options?: TTouchableOptions) => void
+type TUnregisterTouchable = (element: HTMLElement) => void
+
+const TouchContext = createContext<{ touched: HTMLElement | undefined, registerTouchable: TRegisterTouchable, unregisterTouchable: TUnregisterTouchable }>({
+  touched: undefined,
+  registerTouchable: () => undefined,
+  unregisterTouchable: () => undefined,
+})
+export const useTouch = () => useContext(TouchContext)
 
 export default function TouchContextProvider({ children }: React.PropsWithChildren) {
-  const touchedElement = useRef<Element | undefined>(null)
+  const [touchedElement, setTouchedElement] = useState<HTMLElement>()
+  const touchableElements = useRef<Map<HTMLElement, TTouchableOptions>>(new Map())
+
+  const registerTouchable: TRegisterTouchable = (element, options) => {
+    touchableElements.current.set(element, options || {})
+  }
+
+  const unregisterTouchable: TUnregisterTouchable = (element: HTMLElement) => {
+    touchableElements.current.delete(element)
+  }
 
   useEffect(() => {
     if (navigator.maxTouchPoints === 0) return
     document.body.classList.add("touch-device")
 
-    function onElementTouched(event: TouchEvent) {
-      event.preventDefault()
+    let touchedElement: HTMLElement | undefined
+    let touchOrigin: TCoordinate | undefined;
+    let touchableOrigin: TCoordinate | undefined;
+
+    function getTouchCoordinates(event: TouchEvent) {
       const [touch] = event.touches
-      if (!touch) return
-      const elements = document.elementsFromPoint(touch.clientX, touch.clientY)
-      return elements.find((element) => element.hasAttribute("data-touchable"))
+      return { x: touch.clientX, y: touch.clientY }
+    }
+
+    function subtractCoordinates(a: TCoordinate, b: TCoordinate) {
+      return { x: b.x - a.x, y: b.y - a.y }
+    }
+
+    function addCoordinates(a: TCoordinate, b: TCoordinate) {
+      return { x: a.x + b.x, y: a.y + b.y }
+    }
+
+    function getTouchedElement(event: TouchEvent): TTouchableDetails | undefined {
+      event.preventDefault()
+      const { x, y } = getTouchCoordinates(event)
+      const elements = document.elementsFromPoint(x, y) as HTMLElement[]
+      for (const element of elements) {
+        const options = touchableElements.current.get(element)
+        if (options) return { element, options }
+      }
     }
 
     function touchStartHandler(event: TouchEvent) {
-      console.log("touchStart")
-      setTouched(onElementTouched(event))
+      const element = getTouchedElement(event)?.element
+      touchedElement = element
+      setTouchedElement(element)
     }
 
     function touchMoveHandler(event: TouchEvent) {
-      console.log("touchMove")
-      setTouched(onElementTouched(event))
+      if (touchableOrigin) {
+        const coordinates = getTouchCoordinates(event)
+        const delta = subtractCoordinates(touchOrigin!, coordinates)
+        touchableElements.current.get(touchedElement!)?.drag?.onDrag(addCoordinates(touchableOrigin, delta))
+        return
+      }
+
+      const touchedElementDetails = getTouchedElement(event)
+      const dragOptions = touchedElementDetails?.options.drag
+      if (dragOptions && touchedElement && touchedElement === touchedElementDetails?.element) {
+        const coordinates = getTouchCoordinates(event)
+        if (touchOrigin === undefined) touchOrigin = coordinates
+        else touchableOrigin = dragOptions.detectDrag(subtractCoordinates(touchOrigin, coordinates))
+        return
+      }
+
+      touchOrigin = undefined
+      touchableOrigin = undefined
+      touchedElement = touchedElementDetails?.element
+      setTouchedElement(touchedElementDetails?.element)
     }
 
     function touchEndHandler(event: TouchEvent) {
-      console.log("touchEnd")
-      removeTouched()
-    }
-
-    function setTouched(element?: Element) {
-      if (element === touchedElement.current) return
-
-      if (touchedElement.current) touchedElement.current.classList.remove("touched")
-      if (element) element.classList.add("touched")
-
-      touchedElement.current = element
-    }
-
-    function removeTouched() {
-      if (touchedElement.current) touchedElement.current.classList.remove("touched")
+      touchOrigin = undefined
+      touchableOrigin = undefined
+      touchedElement = undefined
+      setTouchedElement(undefined)
     }
 
     document.addEventListener("touchstart", touchStartHandler, { passive: false })
@@ -53,13 +105,13 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
 
     return () => {
       document.removeEventListener("touchstart", touchStartHandler)
-      document.removeEventListener("touchmove", touchStartHandler)
+      document.removeEventListener("touchmove", touchMoveHandler)
       document.removeEventListener("touchend", touchEndHandler)
     }
   }, [])
 
   return (
-    <TouchContext.Provider value={{}}>
+    <TouchContext.Provider value={{ touched: touchedElement, registerTouchable, unregisterTouchable }}>
       {children}
     </TouchContext.Provider>
   );
