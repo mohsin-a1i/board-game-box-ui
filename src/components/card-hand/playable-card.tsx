@@ -28,13 +28,13 @@ export default function PlayableCard({ card, position }: PlayableCardProps) {
     const element = cardElement.current as HTMLElement
     element.id = `pc${position}`
 
-    function detectDrag(delta: TCoordinate) {
-      if (delta.y < -25) return { x: x.get(), y: y.get() }
+    function detectDrag(delta: TCoordinate): TCoordinate | undefined {
+      if (delta[1] < -30) return [x.get(), y.get()]
     }
 
     function onDrag(delta: TCoordinate) {
-      x.set(delta.x)
-      y.set(delta.y)
+      x.set(delta[0])
+      y.set(delta[1])
     }
 
     registerTouchable(element, { drag: { detectDrag, onDrag } })

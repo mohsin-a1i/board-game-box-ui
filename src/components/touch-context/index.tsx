@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-export type TCoordinate = { x: number, y: number }
+export type TCoordinate = [number, number]
 type TTouchableOptions = {
   drag?: {
     detectDrag: (delta: TCoordinate) => TCoordinate | undefined,
@@ -38,29 +38,29 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
 
     let touchedElement: HTMLElement | undefined
     let touchOrigin: TCoordinate | undefined;
-    let touchableOrigin: TCoordinate | undefined;
+    let dragOrigin: TCoordinate | undefined;
 
-    function getTouchCoordinates(event: TouchEvent) {
+    function getTouchCoordinates(event: TouchEvent): TCoordinate {
       const [touch] = event.touches
-      return { x: touch.clientX, y: touch.clientY }
-    }
-
-    function subtractCoordinates(a: TCoordinate, b: TCoordinate) {
-      return { x: b.x - a.x, y: b.y - a.y }
-    }
-
-    function addCoordinates(a: TCoordinate, b: TCoordinate) {
-      return { x: a.x + b.x, y: a.y + b.y }
+      return [touch.clientX, touch.clientY]
     }
 
     function getTouchedElement(event: TouchEvent): TTouchableDetails | undefined {
       event.preventDefault()
-      const { x, y } = getTouchCoordinates(event)
+      const [x, y] = getTouchCoordinates(event)
       const elements = document.elementsFromPoint(x, y) as HTMLElement[]
       for (const element of elements) {
         const options = touchableElements.current.get(element)
         if (options) return { element, options }
       }
+    }
+
+    function subtractCoordinates(a: TCoordinate, b: TCoordinate): TCoordinate {
+      return [a[0] - b[0], a[1] - b[1]]
+    }
+
+    function addCoordinates(a: TCoordinate, b: TCoordinate): TCoordinate {
+      return [a[0] + b[0], a[1] + b[1]]
     }
 
     function touchStartHandler(event: TouchEvent) {
@@ -70,10 +70,9 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
     }
 
     function touchMoveHandler(event: TouchEvent) {
-      if (touchableOrigin) {
+      if (dragOrigin) {
         const coordinates = getTouchCoordinates(event)
-        const delta = subtractCoordinates(touchOrigin!, coordinates)
-        touchableElements.current.get(touchedElement!)?.drag?.onDrag(addCoordinates(touchableOrigin, delta))
+        touchableElements.current.get(touchedElement!)?.drag?.onDrag(addCoordinates(dragOrigin, coordinates))
         return
       }
 
@@ -81,20 +80,24 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
       const dragOptions = touchedElementDetails?.options.drag
       if (dragOptions && touchedElement && touchedElement === touchedElementDetails?.element) {
         const coordinates = getTouchCoordinates(event)
-        if (touchOrigin === undefined) touchOrigin = coordinates
-        else touchableOrigin = dragOptions.detectDrag(subtractCoordinates(touchOrigin, coordinates))
+        if (touchOrigin === undefined) {
+          touchOrigin = coordinates
+        } else {
+          const touchableOrigin = dragOptions.detectDrag(subtractCoordinates(coordinates, touchOrigin))
+          if (touchableOrigin) dragOrigin = subtractCoordinates(touchableOrigin, touchOrigin)
+        }
         return
       }
 
       touchOrigin = undefined
-      touchableOrigin = undefined
+      dragOrigin = undefined
       touchedElement = touchedElementDetails?.element
       setTouchedElement(touchedElementDetails?.element)
     }
 
     function touchEndHandler(event: TouchEvent) {
       touchOrigin = undefined
-      touchableOrigin = undefined
+      dragOrigin = undefined
       touchedElement = undefined
       setTouchedElement(undefined)
     }
