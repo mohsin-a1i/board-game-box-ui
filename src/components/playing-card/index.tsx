@@ -1,7 +1,7 @@
 'use client'
 
 import { useSizeObserver } from "@/hooks/on-size-observer"
-import type { PlayingCardModel, PlayingCardSuit } from "@/models/playing-card-model"
+import type { PlayingCard, PlayingCardSuit } from "@/models/playing-card"
 import cn from "@/utilities/cn"
 import type { SpringOptions } from "motion/react"
 import { HTMLAttributes, useState } from "react"
@@ -18,7 +18,7 @@ type PlayingCardSize = 1 | 2 | 3
 interface PlayingCardProps {
   style?: HTMLAttributes<HTMLDivElement>["style"]
   className?: string
-  card: PlayingCardModel
+  card: PlayingCard
 }
 
 const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }

@@ -1,5 +1,5 @@
 import PlayingCard from "@/components/playing-card"
-import { PlayingCardModel } from "@/models/playing-card-model"
+import { playingCardfromCode } from "@/models/playing-card"
 import styles from "./sequence-board.module.scss"
 
 const board = [
@@ -16,7 +16,7 @@ const board = [
 ]
 
 export default function SequenceBoard() {
-  const boardCards = board.map((code, index) => PlayingCardModel.fromCode(index, code))
+  const boardCards = board.map((code, index) => playingCardfromCode(index, code))
 
   return (
     <div className={styles.board}>

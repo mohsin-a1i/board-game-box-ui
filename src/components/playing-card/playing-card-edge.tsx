@@ -1,4 +1,4 @@
-import type { PlayingCardRank } from "@/models/playing-card-model";
+import type { PlayingCardRank } from "@/models/playing-card";
 import cn from "@/utilities/cn";
 import { SVGProps } from "react";
 import styles from "./playing-card.module.scss";

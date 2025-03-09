@@ -1,4 +1,4 @@
-import type { PlayingCardRank, PlayingCardSuit } from "@/models/playing-card-model";
+import type { PlayingCardRank, PlayingCardSuit } from "@/models/playing-card";
 import cn from "@/utilities/cn";
 import { ClubIcon, DiamondIcon, HeartIcon, JackIcon, KingIcon, QueenIcon, SpadeIcon } from "../icons";
 import styles from "./playing-card.module.scss";
