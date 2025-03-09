@@ -1,18 +1,20 @@
-import type { TCardRank } from "@/types/playing-card";
+import type { PlayingCardRank, PlayingCardSuit } from "@/models/playing-card-model";
 import cn from "@/utilities/cn";
-import { SVGProps } from "react";
+import { ClubIcon, DiamondIcon, HeartIcon, JackIcon, KingIcon, QueenIcon, SpadeIcon } from "../icons";
 import styles from "./playing-card.module.scss";
 
 interface PlayingCardPatternProps {
-  rank: TCardRank
-  Icon: React.FC<SVGProps<SVGSVGElement>>
+  rank: PlayingCardRank
+  suit: PlayingCardSuit
 }
 
-export default function PlayingCardPattern({ rank, Icon }: PlayingCardPatternProps) {
+export default function PlayingCardPattern({ rank, suit }: PlayingCardPatternProps) {
+  const Icon = getIcon(rank, suit)
   const iconCount = getIconCount(rank)
+  const numericalCard = isNumericalCard(rank)
 
   return (
-    <div className={cn(styles.pattern, styles[`pattern-${iconCount}`])}>
+    <div className={cn(styles.pattern, numericalCard && styles[`pattern-${iconCount}`])}>
       {Array.from({ length: iconCount }).map((_, index) => (
         <Icon key={index} className={styles.icon} />
       ))}
@@ -20,7 +22,37 @@ export default function PlayingCardPattern({ rank, Icon }: PlayingCardPatternPro
   )
 }
 
-function getIconCount(rank: TCardRank) {
-  if (rank === "A") return 1
-  return parseInt(rank)
+function isNumericalCard(rank: PlayingCardRank): boolean {
+  switch (rank) {
+    case "J":
+    case "Q":
+    case "K":
+      return false
+    default:
+      return true
+  }
 }
+
+function getIconCount(rank: PlayingCardRank) {
+  switch (rank) {
+    case "J":
+    case "Q":
+    case "K":
+    case "A":
+      return 1
+    default:
+      return parseInt(rank)
+  }
+}
+
+function getIcon(rank: PlayingCardRank, suit: PlayingCardSuit) {
+  if (rank === "J") return JackIcon
+  if (rank === "Q") return QueenIcon
+  if (rank === "K") return KingIcon
+  if (suit === "S") return SpadeIcon
+  if (suit === "C") return ClubIcon
+  if (suit === "H") return HeartIcon
+  if (suit === "D") return DiamondIcon
+  throw new Error(`Invalid card rank ${rank} and suit ${suit}`)
+}
+

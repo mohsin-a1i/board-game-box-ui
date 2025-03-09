@@ -1,22 +1,19 @@
 'use client'
 
 import { useSizeObserver } from "@/hooks/on-size-observer"
-import type { TPlayingCard } from "@/types/playing-card"
 import { type SpringOptions, motion, useSpring } from "motion/react"
 import { useEffect, useState } from "react"
-import PlayingCard from "../playing-card"
-import type { TCoordinate } from "../touch-context"
+import type { Coordinate } from "../touch-context"
 import { useTouch } from "../touch-context"
-import styles from "./card-hand.module.scss"
+import styles from "./playable-card.module.scss"
 
 interface PlayableCardProps {
-  card: TPlayingCard
   position: number
 }
 
 const spring: SpringOptions = { damping: 50, stiffness: 500, mass: 1 }
 
-export default function PlayableCard({ card, position }: PlayableCardProps) {
+export default function PlayableCard({ position, children }: React.PropsWithChildren<PlayableCardProps>) {
   const [cardWidth, setCardWidth] = useState(0)
   const cardElement = useSizeObserver<HTMLDivElement>((width) => setCardWidth(width))
   const { touched, registerTouchable, unregisterTouchable } = useTouch()
@@ -27,11 +24,11 @@ export default function PlayableCard({ card, position }: PlayableCardProps) {
     const element = cardElement.current as HTMLElement
     element.id = `pc${position}`
 
-    function detectDrag(delta: TCoordinate): TCoordinate | undefined {
+    function detectDrag(delta: Coordinate): Coordinate | undefined {
       if (delta[1] < -25) return [x.get(), y.get()]
     }
 
-    function onDrag(delta: TCoordinate) {
+    function onDrag(delta: Coordinate) {
       x.set(delta[0])
       y.set(delta[1])
     }
@@ -71,7 +68,7 @@ export default function PlayableCard({ card, position }: PlayableCardProps) {
       }}
       className={styles.card}
     >
-      <PlayingCard card={card} />
+      {children}
     </motion.div>
   )
 }

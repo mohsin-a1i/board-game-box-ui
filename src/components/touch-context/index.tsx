@@ -2,18 +2,18 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-export type TCoordinate = [number, number]
-type TTouchableOptions = {
+export type Coordinate = [number, number]
+type TouchableOptions = {
   drag?: {
-    detectDrag: (delta: TCoordinate) => TCoordinate | undefined,
-    onDrag: (delta: TCoordinate) => void
+    detectDrag: (delta: Coordinate) => Coordinate | undefined,
+    onDrag: (delta: Coordinate) => void
   }
 }
-type TTouchableDetails = { element: HTMLElement, options: TTouchableOptions }
-type TRegisterTouchable = (element: HTMLElement, options?: TTouchableOptions) => void
-type TUnregisterTouchable = (element: HTMLElement) => void
+type TouchableDetails = { element: HTMLElement, options: TouchableOptions }
+type RegisterTouchable = (element: HTMLElement, options?: TouchableOptions) => void
+type UnregisterTouchable = (element: HTMLElement) => void
 
-const TouchContext = createContext<{ touched: HTMLElement | undefined, registerTouchable: TRegisterTouchable, unregisterTouchable: TUnregisterTouchable }>({
+const TouchContext = createContext<{ touched: HTMLElement | undefined, registerTouchable: RegisterTouchable, unregisterTouchable: UnregisterTouchable }>({
   touched: undefined,
   registerTouchable: () => undefined,
   unregisterTouchable: () => undefined,
@@ -22,13 +22,13 @@ export const useTouch = () => useContext(TouchContext)
 
 export default function TouchContextProvider({ children }: React.PropsWithChildren) {
   const [touchedElement, setTouchedElement] = useState<HTMLElement>()
-  const touchableElements = useRef<Map<HTMLElement, TTouchableOptions>>(new Map())
+  const touchableElements = useRef<Map<HTMLElement, TouchableOptions>>(new Map())
 
-  const registerTouchable: TRegisterTouchable = (element, options) => {
+  const registerTouchable: RegisterTouchable = (element, options) => {
     touchableElements.current.set(element, options || {})
   }
 
-  const unregisterTouchable: TUnregisterTouchable = (element: HTMLElement) => {
+  const unregisterTouchable: UnregisterTouchable = (element: HTMLElement) => {
     touchableElements.current.delete(element)
   }
 
@@ -37,15 +37,15 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
     document.body.classList.add("touch-device")
 
     let touchedElement: HTMLElement | undefined
-    let touchOrigin: TCoordinate | undefined;
-    let dragOrigin: TCoordinate | undefined;
+    let touchOrigin: Coordinate | undefined;
+    let dragOrigin: Coordinate | undefined;
 
-    function getTouchCoordinates(event: TouchEvent): TCoordinate {
+    function getTouchCoordinates(event: TouchEvent): Coordinate {
       const [touch] = event.touches
       return [touch.clientX, touch.clientY]
     }
 
-    function getTouchedElement(event: TouchEvent): TTouchableDetails | undefined {
+    function getTouchedElement(event: TouchEvent): TouchableDetails | undefined {
       event.preventDefault()
       const [x, y] = getTouchCoordinates(event)
       const elements = document.elementsFromPoint(x, y) as HTMLElement[]
@@ -55,11 +55,11 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
       }
     }
 
-    function subtractCoordinates(a: TCoordinate, b: TCoordinate): TCoordinate {
+    function subtractCoordinates(a: Coordinate, b: Coordinate): Coordinate {
       return [a[0] - b[0], a[1] - b[1]]
     }
 
-    function addCoordinates(a: TCoordinate, b: TCoordinate): TCoordinate {
+    function addCoordinates(a: Coordinate, b: Coordinate): Coordinate {
       return [a[0] + b[0], a[1] + b[1]]
     }
 

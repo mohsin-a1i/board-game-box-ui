@@ -1,42 +1,35 @@
 .card {
-  position: relative;
   background: #f2f2f2;
   border-radius: 5%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   aspect-ratio: 0.714;
-  cursor: pointer;
-  transform-style: preserve-3d;
-}
-
-.back,
-.front {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
 }
 
 .back {
-  transform: rotateY(180deg);
-
-  .icon {
-    width: 100%;
-    height: 100%;
-    color: #212121;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20%;
+  color: #212121;
 }
 
 .front {
   display: flex;
 
-  &.spade,
-  &.club {
+  &.red {
+    color: #e20000
+  }
+
+  &.black {
     color: #212121
   }
 
-  &.diamond,
-  &.heart {
-    color: #e20000
+  .face {
+    position: absolute;
+    right: 8%;
+    bottom: 8%;
+    width: 50%;
+    height: auto;
   }
 
   .edge {
@@ -55,11 +48,11 @@
       width: 0.8rem;
       height: auto;
     }
-  }
 
-  .edge:last-of-type {
-    margin-left: auto;
-    transform: rotate(180deg);
+    &.reverse {
+      margin-left: auto;
+      transform: rotate(180deg);
+    }
   }
 
   .pattern {
@@ -174,19 +167,6 @@
       .icon {
         grid-column: 2;
       }
-    }
-  }
-
-  .face {
-    flex: 1;
-    padding: 8% 0%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .icon {
-      width: 80%;
-      height: auto;
     }
   }
 }
