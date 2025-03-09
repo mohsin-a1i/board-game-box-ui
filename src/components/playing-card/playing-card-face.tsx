@@ -1,6 +1,6 @@
-import styles from "./playing-card.module.scss";
-import { JackIcon, QueenIcon, KingIcon } from "../icons";
-import { TCardRank } from "@/types/playing-card";
+import type { TCardRank } from "@/types/playing-card"
+import { JackIcon, KingIcon, QueenIcon } from "../icons"
+import styles from "./playing-card.module.scss"
 
 interface PlayingCardFaceProps {
   rank: TCardRank

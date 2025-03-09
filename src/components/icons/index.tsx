@@ -1,3 +1,4 @@
+export * from "./card-back-pattern"
 export * from "./club"
 export * from "./diamond"
 export * from "./heart"

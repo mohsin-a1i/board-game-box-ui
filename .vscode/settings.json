@@ -1,8 +1,13 @@
 {
-    "editor.formatOnSave": true,
-    "typescript.preferences.organizeImports": {
-        "typeOrder": "first"
-    },
-    "editor.detectIndentation": false,
-    "editor.tabSize": 2
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.preferences.organizeImports": {
+    "typeOrder": "first",
+    "caseFirst": "upper",
+  }
 }

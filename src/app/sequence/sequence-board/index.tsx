@@ -1,26 +1,17 @@
-import type { TPlayingCard } from "@/types/playing-card"
-import styles from "./sequence-board.module.scss"
-import PlayingCard from "@/components/playing-card"
+'use client'
 
-const cards: TPlayingCard[] = [
-  { id: 1, rank: 'A', suit: "spade" },
-  { id: 2, rank: 'K', suit: "diamond" },
-  { id: 3, rank: 'Q', suit: "club" },
-  { id: 4, rank: 'J', suit: "heart" },
-  { id: 5, rank: '2', suit: "diamond" },
-]
+import PlayingCard from "@/components/playing-card"
+import styles from "./sequence-board.module.scss"
 
 export default function SequenceBoard() {
   return (
     <div className={styles.board}>
-      {Array.from({ length: 20 }).map((_, i) =>
-        cards.map((card) =>
-          <PlayingCard
-            key={card.id}
-            className={styles.card}
-            card={card}
-          />
-        )
+      {Array.from({ length: 100 }).map((_, i) =>
+        <PlayingCard
+          key={i}
+          className={styles.card}
+          card={{ id: 1, rank: 'A', suit: "spade" }}
+        />
       )}
     </div>
   )

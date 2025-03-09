@@ -1,44 +1,56 @@
 'use client'
 
-import type { TPlayingCard, TCardSuit, TCardRank } from "@/types/playing-card";
-import styles from "./playing-card.module.scss";
+import { useSizeObserver } from "@/hooks/on-size-observer"
+import type { TCardRank, TCardSuit, TPlayingCard } from "@/types/playing-card"
+import cn from "@/utilities/cn"
+import { type SpringOptions, motion, useSpring } from "motion/react"
+import { HTMLAttributes, useEffect, useState } from "react"
 import { ClubIcon, DiamondIcon, HeartIcon, SpadeIcon } from "../icons"
-import cn from "@/utilities/cn";
-import PlayingCardPattern from "./playing-card-pattern";
-import PlayingCardFace from "./playing-card-face";
-import { HTMLAttributes, useState } from "react";
-import { useSizeObserver } from "@/hooks/on-size-observer";
+import { CardBackPattern } from "../icons/card-back-pattern"
+import PlayingCardEdge from "./playing-card-edge"
+import PlayingCardFace from "./playing-card-face"
+import PlayingCardPattern from "./playing-card-pattern"
+import styles from "./playing-card.module.scss"
 
 interface PlayingCardProps {
   style?: HTMLAttributes<HTMLDivElement>["style"]
   className?: string
-  card: TPlayingCard
+  card: TPlayingCard,
+  flipped?: boolean
 }
 
-export default function PlayingCard({ style, className, card: { rank, suit } }: PlayingCardProps) {
+const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }
+
+export default function PlayingCard({ card, flipped = false }: PlayingCardProps) {
   const [contentVisible, setContentVisible] = useState(false)
   const cardElement = useSizeObserver<HTMLDivElement>((width) => setContentVisible(width > 80))
-  const isFaceCard = checkFaceCard(rank)
-  const SuitIcon = getSuitIcon(suit)
+  const isFaceCard = checkFaceCard(card.rank)
+  const SuitIcon = getSuitIcon(card.suit)
+  const r = useSpring(0, spring)
+
+  useEffect(() => r.set(flipped ? 180 : 0), [flipped])
 
   return (
-    <div ref={cardElement} style={style} className={cn(styles.card, styles[suit], className)}>
-      <div className={styles.edge}>
-        <span className={styles.rank}>{rank}</span>
-        <SuitIcon className={styles.icon} />
+    <motion.div
+      ref={cardElement}
+      style={{ rotateY: r }}
+      className={cn(styles.card)}
+    >
+      <div className={cn(styles.front, styles[card.suit])}>
+        <PlayingCardEdge rank={card.rank} Icon={SuitIcon} />
+        {contentVisible && (
+          isFaceCard ? (
+            <PlayingCardFace rank={card.rank} />
+          ) : (
+            <PlayingCardPattern rank={card.rank} Icon={SuitIcon} />
+          )
+        )}
+        <PlayingCardEdge rank={card.rank} Icon={SuitIcon} />
       </div>
-      {contentVisible && (
-        isFaceCard ? (
-          <PlayingCardFace rank={rank} />
-        ) : (
-          <PlayingCardPattern rank={rank} Icon={SuitIcon} />
-        )
-      )}
-      <div className={styles.edge}>
-        <span className={styles.rank}>{rank}</span>
-        <SuitIcon className={styles.icon} />
+      <div className={styles.back}>
+        <CardBackPattern className={styles.icon} />
       </div>
-    </div>
+    </motion.div>
   )
 }
 

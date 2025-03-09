@@ -1,7 +1,7 @@
 import { SVGProps } from "react";
 
 export const HeartIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg width="800px" height="800px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M1.24264 8.24264L8 15L14.7574 8.24264C15.553 7.44699 16 6.36786 16 5.24264V5.05234C16 2.8143 14.1857 1 11.9477 1C10.7166 1 9.55233 1.55959 8.78331 2.52086L8 3.5L7.21669 2.52086C6.44767 1.55959 5.28338 1 4.05234 1C1.8143 1 0 2.8143 0 5.05234V5.24264C0 6.36786 0.44699 7.44699 1.24264 8.24264Z" />
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" xmlSpace="preserve" fill="currentColor" {...props}>
+    <path d="M459.6 292.5 291.2 460.9c-19.5 19.5-51.2 19.5-70.7 0L52.1 292.5c-149.2-149.2 54.5-353 203.8-203.8 149.6-149.6 353.4 54.2 203.7 203.8z" />
   </svg>
 )

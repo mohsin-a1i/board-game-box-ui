@@ -1,6 +1,6 @@
-import type { TPlayingCard } from "@/types/playing-card";
 import CardHand from "@/components/card-hand";
 import TouchContextProvider from "@/components/touch-context";
+import type { TPlayingCard } from "@/types/playing-card";
 
 const cards: TPlayingCard[] = [
   { id: 1, rank: 'A', suit: "spade" },

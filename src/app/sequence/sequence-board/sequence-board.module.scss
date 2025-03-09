@@ -1,8 +1,7 @@
 .board {
-  height: 80vh;
-  padding: 1%;
+  padding: 0.2rem;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  gap: 1%;
+  gap: 0.2rem;
 }
