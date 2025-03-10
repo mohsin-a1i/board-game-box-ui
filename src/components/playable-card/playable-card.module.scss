@@ -1,5 +1,5 @@
 .card {
-  --card-width: min(20vw, 160px);
+  --card-width: min(30vw, 8rem);
   position: fixed;
   bottom: 0;
   left: calc(50% - var(--card-width) / 2);

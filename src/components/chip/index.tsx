@@ -3,10 +3,11 @@ import styles from "./chip.module.scss";
 
 interface ChipProps {
   className: string;
+  color?: 'red' | 'blue' | 'green'
 }
 
-export default function Chip({ className }: ChipProps) {
+export default function Chip({ className, color = "red" }: ChipProps) {
   return (
-    <div className={cn(styles.chip, className)} />
+    <div className={cn(styles.chip, styles[color], className)} />
   )
 }

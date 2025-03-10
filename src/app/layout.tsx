@@ -28,9 +28,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <main>
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );

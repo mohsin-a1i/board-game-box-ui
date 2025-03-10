@@ -5,13 +5,13 @@ import { type SpringOptions, motion, useSpring } from "motion/react"
 import { type Ref, useEffect } from "react"
 import styles from "./flippable-card.module.scss"
 
-const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }
-
 interface FlippableCardProps {
   ref?: Ref<HTMLDivElement>
   className?: string
   flipped?: boolean
 }
+
+const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }
 
 export default function FlippableCard({ ref, className, flipped = false, children }: React.PropsWithChildren<FlippableCardProps>) {
   const r = useSpring(flipped ? 180 : 0, spring)
