@@ -1,4 +1,4 @@
-import PlayableCard from "@/components/playable-card";
+import Hand from "@/components/hand";
 import PlayingCard from "@/components/playing-card";
 import SpinningHourGlass from "@/components/spinning-hour-glass";
 import StatusBar from "@/components/status-bar";
@@ -20,14 +20,12 @@ export default function SequencePage() {
           <span>Your Turn</span>
         </StatusBar>
         <SequenceBoard />
-        {handCards.map((card, index) =>
-          <PlayableCard
-            key={card.id}
-            position={index - Math.ceil(handCards.length / 2)}
-          >
-            <PlayingCard card={card} />
-          </PlayableCard>
-        )}
+        <Hand>
+          {handCards.map((card) =>
+            <PlayingCard key={card.id} card={card} />
+          )}
+        </Hand>
+
       </div>
     </TouchContextProvider>
   );

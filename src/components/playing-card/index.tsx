@@ -3,10 +3,11 @@
 import { useSizeObserver } from "@/hooks/on-size-observer"
 import type { PlayingCard, PlayingCardSuit } from "@/models/playing-card"
 import cn from "@/utilities/cn"
-import { HTMLAttributes, useState } from "react"
-import FlippableCard from "../flippable-card"
-import FlippableCardBack from "../flippable-card/flippable-card-back"
-import FlippableCardFront from "../flippable-card/flippable-card-front"
+import { type SpringOptions, useSpring } from "motion/react"
+import { useEffect, useState } from "react"
+import Card, { type CardProps } from "../card"
+import CardBack from "../card/card-back"
+import CardFront from "../card/card-front"
 import { CardBackPattern, ClubIcon, DiamondIcon, HeartIcon, SpadeIcon } from "../icons"
 import PlayingCardEdge from "./playing-card-edge"
 import PlayingCardPattern from "./playing-card-pattern"
@@ -14,30 +15,34 @@ import styles from "./playing-card.module.scss"
 
 type PlayingCardSize = 1 | 2 | 3
 
-interface PlayingCardProps {
-  style?: HTMLAttributes<HTMLDivElement>["style"]
-  className?: string
+interface PlayingCardProps extends CardProps {
   card: PlayingCard
 }
 
-export default function PlayingCard({ card }: PlayingCardProps) {
+const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }
+
+export default function PlayingCard({ className, transform, card }: PlayingCardProps) {
   const [size, setSize] = useState<PlayingCardSize>(1)
-  const cardElement = useSizeObserver<HTMLDivElement>((width) => setSize(width > 100 ? 3 : width > 50 ? 2 : 1))
+  const ref = useSizeObserver<HTMLDivElement>((width) => setSize(width > 100 ? 3 : width > 50 ? 2 : 1))
+  const rotateY = useSpring(card.flipped ? 180 : 0, spring)
+
   const SuitIcon = getSuitIcon(card.suit)
   const suitColor = getSuitColor(card.suit)
 
+  useEffect(() => rotateY.set(card.flipped ? 180 : 0), [card.flipped])
+
   return (
-    <FlippableCard ref={cardElement} className={styles.card} flipped={card.flipped}>
-      <FlippableCardFront className={cn(styles.front, styles[suitColor])}>
+    <Card ref={ref} className={cn(styles.card, className)} transform={{ ...transform, rotateY }}>
+      <CardFront className={cn(styles.front, styles[suitColor])}>
         <PlayingCardEdge rank={card.rank} Icon={SuitIcon} />
         {size === 1 && <SuitIcon className={styles.face} />}
         {size === 3 && <PlayingCardPattern rank={card.rank} suit={card.suit} />}
         {size > 1 && <PlayingCardEdge rank={card.rank} Icon={SuitIcon} reverse={true} />}
-      </FlippableCardFront>
-      <FlippableCardBack className={styles.back}>
+      </CardFront>
+      <CardBack className={styles.back}>
         <CardBackPattern />
-      </FlippableCardBack>
-    </FlippableCard>
+      </CardBack>
+    </Card>
   )
 }
 
