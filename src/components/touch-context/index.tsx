@@ -46,12 +46,14 @@ export default function TouchContextProvider({ children }: React.PropsWithChildr
     }
 
     function getTouchedElement(event: TouchEvent): TouchableDetails | undefined {
-      event.preventDefault()
       const [x, y] = getTouchCoordinates(event)
       const elements = document.elementsFromPoint(x, y) as HTMLElement[]
       for (const element of elements) {
         const options = touchableElements.current.get(element)
-        if (options) return { element, options }
+        if (options) {
+          event.preventDefault()
+          return { element, options }
+        }
       }
     }
 

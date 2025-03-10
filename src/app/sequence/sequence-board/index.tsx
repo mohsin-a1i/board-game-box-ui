@@ -1,3 +1,4 @@
+import Chip from "@/components/chip"
 import PlayingCard from "@/components/playing-card"
 import { playingCardfromCode } from "@/models/playing-card"
 import styles from "./sequence-board.module.scss"
@@ -21,11 +22,13 @@ export default function SequenceBoard() {
   return (
     <div className={styles.board}>
       {boardCards.map((card) =>
-        <PlayingCard
-          key={card.id}
-          className={styles.card}
-          card={card}
-        />
+        <div key={card.id} className={styles.placeholder}>
+          <PlayingCard
+            className={styles.card}
+            card={card}
+          />
+          {card.id > 95 && <Chip className={styles.chip} />}
+        </div>
       )}
     </div>
   )

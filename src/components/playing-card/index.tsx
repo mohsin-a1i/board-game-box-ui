@@ -3,7 +3,6 @@
 import { useSizeObserver } from "@/hooks/on-size-observer"
 import type { PlayingCard, PlayingCardSuit } from "@/models/playing-card"
 import cn from "@/utilities/cn"
-import type { SpringOptions } from "motion/react"
 import { HTMLAttributes, useState } from "react"
 import FlippableCard from "../flippable-card"
 import FlippableCardBack from "../flippable-card/flippable-card-back"
@@ -20,8 +19,6 @@ interface PlayingCardProps {
   className?: string
   card: PlayingCard
 }
-
-const spring: SpringOptions = { damping: 10, stiffness: 100, mass: 1 }
 
 export default function PlayingCard({ card }: PlayingCardProps) {
   const [size, setSize] = useState<PlayingCardSize>(1)
